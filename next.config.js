@@ -33,6 +33,31 @@ const nextConfig = {
       use: ['raw-loader', 'glslify-loader'],
     })
 
+    config.module.rules.push({
+      test: /\.(glb|gltf)$/,
+      use: {
+        loader: "file-loader",
+        options: {
+          publicPath: `${config.assetPrefix}/_next/static/images/`,
+          outputPath: `${isServer ? '../' : ''}static/images/`,
+          name: '[name].[ext]',
+        }
+      }
+    })
+
+    // For bin file
+    config.module.rules.push({
+      test: /\.(bin)$/,
+      use: {
+        loader: 'file-loader',
+        options: {
+          publicPath: "/_next/static/images",
+          outputPath: "static/images/",
+          name: '[name].[ext]' // keep the original name
+        }
+      },
+    });
+
     return config
   },
 }
@@ -79,5 +104,6 @@ module.exports = plugins(
     ],
     withBundleAnalyzer,
   ],
-  nextConfig
+  nextConfig,
+
 )
